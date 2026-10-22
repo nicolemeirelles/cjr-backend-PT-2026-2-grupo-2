@@ -38,6 +38,10 @@ export class UsersService {
     return this.prisma.user.findMany({ select: userSelect });
   }
 
+  findByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({ where: { id }, select: userSelect });
     if (!user) {
