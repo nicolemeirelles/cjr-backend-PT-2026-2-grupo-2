@@ -1,0 +1,16 @@
+# dependencias e build
+node_modules
+dist
+coverage
+
+# variaveis de ambiente (nunca commitar)
+.env
+.env.backup
+
+# prisma
+/generated/prisma
+
+# sistema / editor
+.DS_Store
+.idea
+*.log
