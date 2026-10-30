@@ -16,6 +16,15 @@ export class AvaliacaoLojaController {
   findAll() {
     return this.avaliacaoLojaService.findAll();
   }
+   @Get('id:')
+  findOne(@Param('id:') id: string) {
+    return this.avaliacaoLojaService.findOne(+id);
+  }
+
+  @Get('id:')
+  findAllByProduct(@Param('storeId') storeId: string) {
+    return this.avaliacaoLojaService.findAllByStore(+storeId);
+  }
   
   @Patch('id:')
   update(@Param('id') id: string, @Body() updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto) {
