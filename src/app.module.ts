@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AvaliacaoLojaModule } from './avaliacao-loja/avaliacao-loja.module';
+import { AvaliacaoProdutoModule } from './avaliacao-produto/avaliacao-produto.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AvaliacaoLojaModule } from './avaliacao-loja/avaliacao-loja.module';
     UsersModule,
     AuthModule,
     AvaliacaoLojaModule,
+    AvaliacaoProdutoModule,
   ],
   controllers: [AppController],
   providers: [
