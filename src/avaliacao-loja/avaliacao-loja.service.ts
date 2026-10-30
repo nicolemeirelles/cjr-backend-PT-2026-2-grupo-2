@@ -59,7 +59,29 @@ export class AvaliacaoLojaService {
           throw new NotFoundException('Avaliação da loja não encontrada.');
         }
         return avaliacao;
-        
-      
         }
+    async remove(id: number, userId: number) {
+      await this.verificarPropriedade(id, userId);
+
+      return await this.prisma.storeRating.delete({
+      where: { id },
+    });
+  }    
+        
+    private async verificarPropriedade(id: number, userId: number) {
+        const avaliacao = await this.prisma.storeRating.findUnique({
+        where: { id },
+    });
+  
+
+    if (!avaliacao) {
+      throw new NotFoundException('Avaliação da loja não encontrada.');
+    }
+
+    if (avaliacao.user_id !== userId) {
+      throw new ForbiddenException(
+        'Você não tem permissão para modificar este recurso.',
+      );
+    }
+  }
 }

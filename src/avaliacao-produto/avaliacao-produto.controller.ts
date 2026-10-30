@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req} from '@nestjs/common';
 import { AvaliacaoProdutoService } from './avaliacao-produto.service';
 import { CreateAvaliacaoProdutoDto } from './dto/create-avaliacao-produto.dto';
 import { UpdateAvaliacaoProdutoDto } from './dto/update-avaliacao-produto.dto';
@@ -9,7 +9,8 @@ export class AvaliacaoProdutoController {
   constructor(private readonly avaliacaoProdutoService: AvaliacaoProdutoService) {}
 
   @Post()
-  create(@Body() createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto) {
+  create(@Body() createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto, @Req() req: any,) {
+    const userId = req.user?.id || 1;
     return this.avaliacaoProdutoService.create(createAvaliacaoProdutoDto);
   }
 
@@ -30,9 +31,20 @@ export class AvaliacaoProdutoController {
 
 
   @Patch('id:')
-  update(@Param('id') id: string, @Body() updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto) {
-    return this.avaliacaoProdutoService.update(+id, updateAvaliacaoProdutoDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto,
+    @Req() req: any,
+  ) {
+    const userId = req.user?.id || 1;
+    return this.avaliacaoProdutoService.update(+id, updateAvaliacaoProdutoDto, userId);
   }
   
-
+  @Delete(':id')
+  remove(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.id || 1;
+    return this.avaliacaoProdutoService.remove(+id, userId);
+  }
 }
+  
+
