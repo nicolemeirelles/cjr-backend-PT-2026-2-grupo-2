@@ -2,7 +2,6 @@
 import { IsInt, IsString, IsOptional, Min, Max, IsNotEmpty } from 'class-validator';
 
 export class CreateAvaliacaoLojaDto {
-    id: number;
     @IsInt()
     @IsNotEmpty()
     user_id: number;
