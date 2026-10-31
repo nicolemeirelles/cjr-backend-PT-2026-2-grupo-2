@@ -72,9 +72,9 @@ export class ComentariosService {
 
   async update(
     id: number,
-    updateComentarioAvaliacaoDto: UpdateComentarioDto,
+    updateComentarioDto: UpdateComentarioDto,
   ) {
-    const { user_id, content } = updateComentarioAvaliacaoDto;
+    const { user_id, content } = updateComentarioDto;
 
     await this.verificarPropriedade(id, user_id);
 
