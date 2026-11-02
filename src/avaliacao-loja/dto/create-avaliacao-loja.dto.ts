@@ -1,18 +1,22 @@
 
-import { IsInt, IsString, IsOptional, Min, Max, IsNotEmpty } from 'class-validator';
+import {IsInt, IsOptional, IsPositive, IsString, Max, MaxLength, Min,} from 'class-validator';
 
 export class CreateAvaliacaoLojaDto {
-    @IsInt()
-    @IsNotEmpty()
-    user_id: number;
-    @IsInt()
-    @IsNotEmpty()
-    store_id: number;
-    @IsInt()
-    @Min(0)
-    @Max(5)
-    rating: number;
-    @IsOptional()
-    @IsString()
-    comment?: string;
+  @IsInt()
+  @IsPositive()
+  user_id: number;
+
+  @IsInt()
+  @IsPositive()
+  store_id: number;
+
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  rating: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  comment?: string;
 }
