@@ -7,7 +7,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { ComentariosModule } from './comentarios/comentarios.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { ComentariosModule } from './comentarios/comentarios.module';
     PrismaModule,
     UsersModule,
     AuthModule,
-    ComentariosModule,
   ],
   controllers: [AppController],
   providers: [
