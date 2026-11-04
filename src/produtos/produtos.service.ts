@@ -47,7 +47,14 @@ export class ProdutosService {
 
   async remove(id: number, userId: number) {
     await this.checkOwner(id, userId);
-    return this.prisma.product.delete({ where: { id } });
+
+    // Apaga tudo que depende do produto antes dele (o schema nao tem cascade)
+    return this.prisma.$transaction(async (tx) => {
+      await tx.ratingComment.deleteMany({ where: { productRating: { product_id: id } } });
+      await tx.productRating.deleteMany({ where: { product_id: id } });
+      await tx.productImage.deleteMany({ where: { product_id: id } });
+      return tx.product.delete({ where: { id } });
+    });
   }
 
   private async checkOwner(id: number, userId: number) {
