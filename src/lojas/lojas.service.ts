@@ -48,7 +48,7 @@ export class LojasService {
     return this.prisma.store.delete({ where: { id } });
   }
 
-  private async checkOwner(id: number, userId: number) {
+  async checkOwner(id: number, userId: number) {
     const loja = await this.prisma.store.findUnique({ where: { id } });
     if (!loja) {
       throw new NotFoundException('Loja não encontrada');
