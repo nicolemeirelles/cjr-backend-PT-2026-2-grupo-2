@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { LojasModule } from './lojas/lojas.module';
 import { CategoriasModule } from './categorias/categorias.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { CategoriasModule } from './categorias/categorias.module';
     PrismaModule,
     UsersModule,
     AuthModule,
+    LojasModule,
     CategoriasModule,
   ],
   controllers: [AppController],
