@@ -8,6 +8,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { ComentariosModule } from './comentarios/comentarios.module';
+import { LojasModule} from './lojas/lojas.module';
+import { ImagensProdutoModule } from './imagens-produto/imagens-produto.module';
+import { AvaliacaoLojaModule } from './avaliacao-loja/avaliacao-loja.module';
+import { AvaliacaoProdutoModule } from './avaliacao-produto/avaliacao-produto.module';
+import { ProdutosModule } from './produtos/produtos.module';
+
 
 @Module({
   imports: [
@@ -16,6 +22,11 @@ import { ComentariosModule } from './comentarios/comentarios.module';
     UsersModule,
     AuthModule,
     ComentariosModule,
+    LojasModule,
+    ImagensProdutoModule,
+    AvaliacaoLojaModule,
+    AvaliacaoProdutoModule,
+    ProdutosModule,
   ],
   controllers: [AppController],
   providers: [
