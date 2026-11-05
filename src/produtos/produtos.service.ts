@@ -57,7 +57,7 @@ export class ProdutosService {
     });
   }
 
-  private async checkOwner(id: number, userId: number) {
+  async checkOwner(id: number, userId: number) {
     const produto = await this.prisma.product.findUnique({ where: { id } });
     if (!produto) {
       throw new NotFoundException('Produto não encontrado');
