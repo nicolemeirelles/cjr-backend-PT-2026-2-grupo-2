@@ -5,6 +5,7 @@ import { UpdateComentarioDto } from './dto/update-comentario.dto';
 
 const parseIntOpcional = new ParseIntPipe({ optional: true });
 
+@Controller('comentarios')
 export class ComentariosController {
   constructor(
     private readonly comentariosService: ComentariosService,
