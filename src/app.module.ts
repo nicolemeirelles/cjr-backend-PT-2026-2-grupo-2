@@ -7,12 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { AvaliacaoLojaModule } from './avaliacao-loja/avaliacao-loja.module';
-import { AvaliacaoProdutoModule } from './avaliacao-produto/avaliacao-produto.module';
-import { LojasModule } from './lojas/lojas.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { ProdutosModule } from './produtos/produtos.module';
-import { ImagensProdutoModule } from './imagens-produto/imagens-produto.module';
+import { ComentariosModule } from './comentarios/comentarios.module';
 
 @Module({
   imports: [
@@ -20,12 +15,7 @@ import { ImagensProdutoModule } from './imagens-produto/imagens-produto.module';
     PrismaModule,
     UsersModule,
     AuthModule,
-    AvaliacaoLojaModule,
-    AvaliacaoProdutoModule,
-    LojasModule,
-    CategoriasModule,
-    ProdutosModule,
-    ImagensProdutoModule,
+    ComentariosModule,
   ],
   controllers: [AppController],
   providers: [
