@@ -45,10 +45,23 @@ export class LojasService {
 
   async remove(id: number, userId: number) {
     await this.checkOwner(id, userId);
-    return this.prisma.store.delete({ where: { id } });
+
+    // Apaga tudo que depende da loja (e dos produtos dela) antes dela (o schema nao tem cascade)
+    return this.prisma.$transaction(async (tx) => {
+      await tx.ratingComment.deleteMany({
+        where: {
+          OR: [{ storeRating: { store_id: id } }, { productRating: { product: { store_id: id } } }],
+        },
+      });
+      await tx.storeRating.deleteMany({ where: { store_id: id } });
+      await tx.productRating.deleteMany({ where: { product: { store_id: id } } });
+      await tx.productImage.deleteMany({ where: { product: { store_id: id } } });
+      await tx.product.deleteMany({ where: { store_id: id } });
+      return tx.store.delete({ where: { id } });
+    });
   }
 
-  private async checkOwner(id: number, userId: number) {
+  async checkOwner(id: number, userId: number) {
     const loja = await this.prisma.store.findUnique({ where: { id } });
     if (!loja) {
       throw new NotFoundException('Loja não encontrada');

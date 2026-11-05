@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { LojasModule } from './lojas/lojas.module';
 import { CategoriasModule } from './categorias/categorias.module';
+import { ProdutosModule } from './produtos/produtos.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CategoriasModule } from './categorias/categorias.module';
     AuthModule,
     LojasModule,
     CategoriasModule,
+    ProdutosModule,
   ],
   controllers: [AppController],
   providers: [
