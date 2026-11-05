@@ -2,9 +2,6 @@
 import {IsInt, IsOptional, IsPositive, IsString, Max, MaxLength, Min,} from 'class-validator';
 
 export class CreateAvaliacaoLojaDto {
-  @IsInt()
-  @IsPositive()
-  user_id: number;
 
   @IsInt()
   @IsPositive()

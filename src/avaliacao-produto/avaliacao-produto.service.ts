@@ -20,8 +20,8 @@ const INCLUDE_DETALHES = {
 export class AvaliacaoProdutoService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto) {
-    const { user_id, product_id, rating, comment } = createAvaliacaoProdutoDto;
+  async create(createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto, userId: number) {
+    const { product_id, rating, comment } = createAvaliacaoProdutoDto;
 
     const produto = await this.prisma.product.findUnique({
       where: { id: product_id },
@@ -32,7 +32,7 @@ export class AvaliacaoProdutoService {
     }
 
     return await this.prisma.productRating.create({
-      data: { user_id, product_id, rating, comment },
+      data: { user_id: userId, product_id, rating, comment },
       include: INCLUDE_AUTOR,
     });
   }
@@ -58,13 +58,10 @@ export class AvaliacaoProdutoService {
     return avaliacao;
   }
 
-  async update(
-    id: number,
-    updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto,
-  ) {
-    const { user_id, rating, comment } = updateAvaliacaoProdutoDto;
+  async update(id: number, updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto, userId: number) {
+    const {rating, comment } = updateAvaliacaoProdutoDto;
 
-    await this.verificarPropriedade(id, user_id);
+    await this.verificarPropriedade(id, userId);
 
     return await this.prisma.productRating.update({
       where: { id },

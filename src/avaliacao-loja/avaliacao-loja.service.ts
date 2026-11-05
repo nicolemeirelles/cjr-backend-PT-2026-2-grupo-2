@@ -20,8 +20,8 @@ const INCLUDE_DETALHES = {
 export class AvaliacaoLojaService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createAvaliacaoLojaDto: CreateAvaliacaoLojaDto) {
-    const { user_id, store_id, rating, comment } = createAvaliacaoLojaDto;
+  async create(createAvaliacaoLojaDto: CreateAvaliacaoLojaDto, userId: number) {
+    const {store_id, rating, comment } = createAvaliacaoLojaDto;
 
     const loja = await this.prisma.store.findUnique({
       where: { id: store_id },
@@ -32,7 +32,7 @@ export class AvaliacaoLojaService {
     }
 
     return await this.prisma.storeRating.create({
-      data: { user_id, store_id, rating, comment },
+      data: { user_id: userId, store_id, rating, comment },
       include: INCLUDE_AUTOR,
     });
   }
@@ -58,10 +58,10 @@ export class AvaliacaoLojaService {
     return avaliacao;
   }
 
-  async update(id: number, updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto) {
-    const { user_id, rating, comment } = updateAvaliacaoLojaDto;
+  async update(id: number, updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto, userId: number) {
+    const {rating, comment } = updateAvaliacaoLojaDto;
 
-    await this.verificarPropriedade(id, user_id);
+    await this.verificarPropriedade(id, userId);
 
     return await this.prisma.storeRating.update({
       where: { id },
