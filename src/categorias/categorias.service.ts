@@ -7,14 +7,11 @@ export class CategoriasService {
   constructor(private prisma: PrismaService) {
 
   }
-  async create(createCategoriaDto: CreateCategoriaDto) { {
-    const categoria = await this.prisma.category.create({
+  async create(createCategoriaDto: CreateCategoriaDto) {
+    return await this.prisma.category.create({
       data: createCategoriaDto,
     });
-    return await this.prisma.category.create({ data: createCategoriaDto });
-    
   }
-}
 async findAll() {
     return await this.prisma.category.findMany();
   }
