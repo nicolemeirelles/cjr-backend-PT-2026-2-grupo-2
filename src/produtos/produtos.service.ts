@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { LojasService } from '../lojas/lojas.service';
 import { CreateProdutoDto, UpdateProdutoDto } from './produtos.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProdutosService {
@@ -17,8 +18,14 @@ export class ProdutosService {
     return this.prisma.product.create({ data: createProdutoDto });
   }
 
-  findAll() {
-    return this.prisma.product.findMany();
+  findAll(userId?: number) {
+    return this.prisma.product.findMany({
+      where: userId ? { store: { user_id: userId } } : undefined,
+      include: {
+        store: { select: { name: true, logo_url: true } },
+        images: { orderBy: { order: 'asc' }, take: 1 },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -42,15 +49,20 @@ export class ProdutosService {
       await this.checkCategory(updateProdutoDto.category_id);
     }
 
-    return this.prisma.product.update({ where: { id }, data: updateProdutoDto });
+    return this.prisma.product.update({
+      where: { id },
+      data: updateProdutoDto,
+    });
   }
 
   async remove(id: number, userId: number) {
     await this.checkOwner(id, userId);
 
     // Apaga tudo que depende do produto antes dele (o schema nao tem cascade)
-    return this.prisma.$transaction(async (tx) => {
-      await tx.ratingComment.deleteMany({ where: { productRating: { product_id: id } } });
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      await tx.ratingComment.deleteMany({
+        where: { productRating: { product_id: id } },
+      });
       await tx.productRating.deleteMany({ where: { product_id: id } });
       await tx.productImage.deleteMany({ where: { product_id: id } });
       return tx.product.delete({ where: { id } });
@@ -66,7 +78,9 @@ export class ProdutosService {
   }
 
   private async checkCategory(categoryId: number) {
-    const category = await this.prisma.category.findUnique({ where: { id: categoryId } });
+    const category = await this.prisma.category.findUnique({
+      where: { id: categoryId },
+    });
     if (!category) {
       throw new NotFoundException('Categoria não encontrada');
     }
