@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ProdutosService } from './produtos.service';
 import { CreateProdutoDto, UpdateProdutoDto } from './produtos.dto';
 import { Public } from '../auth/decorators/isPublic.decorator';
@@ -10,14 +21,25 @@ export class ProdutosController {
   constructor(private readonly produtosService: ProdutosService) {}
 
   @Post()
-  create(@Body() createProdutoDto: CreateProdutoDto, @CurrentUser() currentUser: UserPayload) {
+  create(
+    @Body() createProdutoDto: CreateProdutoDto,
+    @CurrentUser() currentUser: UserPayload,
+  ) {
     return this.produtosService.create(createProdutoDto, currentUser.sub);
   }
 
   @Public()
   @Get()
-  findAll() {
-    return this.produtosService.findAll();
+  findAll(
+    @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
+  ) {
+    if (
+      userId !== undefined &&
+      (!Number.isInteger(userId) || userId < 1 || userId > 2_147_483_647)
+    ) {
+      throw new BadRequestException('userId deve ser um ID de usuário válido');
+    }
+    return this.produtosService.findAll(userId);
   }
 
   @Public()
@@ -36,7 +58,10 @@ export class ProdutosController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() currentUser: UserPayload) {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() currentUser: UserPayload,
+  ) {
     return this.produtosService.remove(id, currentUser.sub);
   }
 }
