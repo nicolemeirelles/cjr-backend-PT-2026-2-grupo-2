@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -32,6 +33,12 @@ export class ProdutosController {
   findAll(
     @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
   ) {
+    if (
+      userId !== undefined &&
+      (!Number.isInteger(userId) || userId < 1 || userId > 2_147_483_647)
+    ) {
+      throw new BadRequestException('userId deve ser um ID de usuário válido');
+    }
     return this.produtosService.findAll(userId);
   }
 

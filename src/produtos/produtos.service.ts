@@ -20,7 +20,7 @@ export class ProdutosService {
 
   findAll(userId?: number) {
     return this.prisma.product.findMany({
-      where: userId ? { store: { user_id: userId } } : undefined,
+      where: userId === undefined ? undefined : { store: { user_id: userId } },
       include: {
         store: { select: { name: true, logo_url: true } },
         images: { orderBy: { order: 'asc' }, take: 1 },
