@@ -23,14 +23,30 @@ export class LojasService {
       where: { id },
       include: {
         category: true,
-        products: true,
+        products: { include: { images: { orderBy: { order: 'asc' } } } },
         user: { select: { id: true, name: true, username: true } },
+        storeRatings: {
+          select: {
+            id: true,
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: { select: { id: true, name: true, username: true, profile_picture_url: true } },
+          },
+          orderBy: { createdAt: 'desc' },
+        },
       },
     });
     if (!loja) {
       throw new NotFoundException('Loja não encontrada');
     }
-    return loja;
+
+    const totalAvaliacoes = loja.storeRatings.length;
+    const average_rating = totalAvaliacoes
+      ? Math.round((loja.storeRatings.reduce((soma, avaliacao) => soma + avaliacao.rating, 0) / totalAvaliacoes) * 100) / 100
+      : null;
+
+    return { ...loja, average_rating };
   }
 
   async update(id: number, updateLojaDto: UpdateLojaDto, userId: number) {
