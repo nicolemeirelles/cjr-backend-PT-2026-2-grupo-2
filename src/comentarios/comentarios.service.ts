@@ -1,8 +1,12 @@
-import {BadRequestException, ForbiddenException, Injectable, NotFoundException,} from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateComentarioDto } from './dto/create-comentario.dto';
 import { UpdateComentarioDto } from './dto/update-comentario.dto';
-
 
 const INCLUDE_AUTOR = {
   user: { select: { id: true, name: true } },
@@ -12,11 +16,9 @@ const INCLUDE_AUTOR = {
 export class ComentariosService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createComentarioDto: CreateComentarioDto) {
-    const { user_id, content, store_rating_id, product_rating_id } =
-      createComentarioDto;
+  async create(createComentarioDto: CreateComentarioDto, userId: number) {
+    const { content, store_rating_id, product_rating_id } = createComentarioDto;
 
-    
     if (store_rating_id && !product_rating_id) {
       const avaliacao = await this.prisma.storeRating.findUnique({
         where: { id: store_rating_id },
@@ -40,12 +42,11 @@ export class ComentariosService {
     }
 
     return await this.prisma.ratingComment.create({
-      data: { user_id, store_rating_id, product_rating_id, content },
+      data: { user_id: userId, store_rating_id, product_rating_id, content },
       include: INCLUDE_AUTOR,
     });
   }
 
-  
   async findAll(storeRatingId?: number, productRatingId?: number) {
     return await this.prisma.ratingComment.findMany({
       where: {
@@ -73,14 +74,15 @@ export class ComentariosService {
   async update(
     id: number,
     updateComentarioDto: UpdateComentarioDto,
+    userId: number,
   ) {
-    const { user_id, content } = updateComentarioDto;
+    const { content } = updateComentarioDto;
 
-    await this.verificarPropriedade(id, user_id);
+    await this.verificarPropriedade(id, userId);
 
     return await this.prisma.ratingComment.update({
       where: { id },
-      data: { content }, 
+      data: { content },
       include: INCLUDE_AUTOR,
     });
   }
