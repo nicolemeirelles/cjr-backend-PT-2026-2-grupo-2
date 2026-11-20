@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength, Matches } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Nome completo é obrigatório' })
@@ -15,8 +15,13 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty({ message: 'Senha é obrigatória' })
-  @MinLength(6, { message: 'A senha deve ter pelo menos 6 caracteres' })
+  @MinLength(8, { message: 'A senha deve ter pelo menos 8 caracteres' })
+  @Matches(/[A-Z]/, { message: 'A senha deve ter pelo menos uma letra maiúscula' })
+  @Matches(/[a-z]/, { message: 'A senha deve ter pelo menos uma letra minúscula' })
+  @Matches(/\d/, { message: 'A senha deve ter pelo menos um número' })
+  @Matches(/[^A-Za-z0-9]/, { message: 'A senha deve ter pelo menos um caractere especial' })
   password: string;
+  
 
   @IsNotEmpty({ message: 'Confirmação de senha é obrigatória' })
   confirmPassword: string;
