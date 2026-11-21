@@ -1,8 +1,19 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Request,} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AvaliacaoLojaService } from './avaliacao-loja.service';
 import { CreateAvaliacaoLojaDto } from './dto/create-avaliacao-loja.dto';
 import { UpdateAvaliacaoLojaDto } from './dto/update-avaliacao-loja.dto';
 import { Public } from '../auth/decorators/isPublic.decorator';
+import { CurrentUser } from '../auth/decorators/currentUser.decorator';
 
 const parseIntOpcional = new ParseIntPipe({ optional: true });
 
@@ -11,9 +22,10 @@ export class AvaliacaoLojaController {
   constructor(private readonly avaliacaoLojaService: AvaliacaoLojaService) {}
 
   @Post()
-  create(@Body() createAvaliacaoLojaDto: CreateAvaliacaoLojaDto,
-  @Request() req: any,) {
-    const userId = req.user.id;
+  create(
+    @Body() createAvaliacaoLojaDto: CreateAvaliacaoLojaDto,
+    @CurrentUser('sub') userId: number,
+  ) {
     return this.avaliacaoLojaService.create(createAvaliacaoLojaDto, userId);
   }
 
@@ -33,18 +45,16 @@ export class AvaliacaoLojaController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto,
-    @Request() req: any,
+    @CurrentUser('sub') userId: number,
   ) {
-    const userId = req.user.id;
     return this.avaliacaoLojaService.update(id, updateAvaliacaoLojaDto, userId);
   }
 
   @Delete(':id')
   remove(
     @Param('id', ParseIntPipe) id: number,
-    @Request() req: any,
+    @CurrentUser('sub') userId: number,
   ) {
-    const userId = req.user.id;
     return this.avaliacaoLojaService.remove(id, userId);
   }
 }
