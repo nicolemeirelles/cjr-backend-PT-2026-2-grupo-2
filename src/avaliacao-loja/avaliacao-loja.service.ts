@@ -1,10 +1,14 @@
-import {ForbiddenException, Injectable, NotFoundException,} from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAvaliacaoLojaDto } from './dto/create-avaliacao-loja.dto';
 import { UpdateAvaliacaoLojaDto } from './dto/update-avaliacao-loja.dto';
 
 const INCLUDE_AUTOR = {
-  user: { select: { id: true, name: true } },
+  user: { select: { id: true, name: true, profile_picture_url: true } },
 } as const;
 
 const INCLUDE_DETALHES = {
@@ -21,7 +25,7 @@ export class AvaliacaoLojaService {
   constructor(private prisma: PrismaService) {}
 
   async create(createAvaliacaoLojaDto: CreateAvaliacaoLojaDto, userId: number) {
-    const {store_id, rating, comment } = createAvaliacaoLojaDto;
+    const { store_id, rating, comment } = createAvaliacaoLojaDto;
 
     const loja = await this.prisma.store.findUnique({
       where: { id: store_id },
@@ -58,8 +62,12 @@ export class AvaliacaoLojaService {
     return avaliacao;
   }
 
-  async update(id: number, updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto, userId: number) {
-    const {rating, comment } = updateAvaliacaoLojaDto;
+  async update(
+    id: number,
+    updateAvaliacaoLojaDto: UpdateAvaliacaoLojaDto,
+    userId: number,
+  ) {
+    const { rating, comment } = updateAvaliacaoLojaDto;
 
     await this.verificarPropriedade(id, userId);
 

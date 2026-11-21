@@ -9,7 +9,7 @@ import { CreateComentarioDto } from './dto/create-comentario.dto';
 import { UpdateComentarioDto } from './dto/update-comentario.dto';
 
 const INCLUDE_AUTOR = {
-  user: { select: { id: true, name: true } },
+  user: { select: { id: true, name: true, profile_picture_url: true } },
 } as const;
 
 @Injectable()
