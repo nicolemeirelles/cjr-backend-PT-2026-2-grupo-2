@@ -1,14 +1,14 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsInt, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateLojaDto {
   @IsNotEmpty({ message: 'Nome da loja é obrigatório' })
   @IsString()
   name: string;
 
-  @IsNotEmpty({ message: 'Descrição da loja é obrigatória' })
+  @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsNotEmpty({ message: 'Logo da loja é obrigatória' })
   @IsUrl({}, { message: 'URL da logo inválida' })
