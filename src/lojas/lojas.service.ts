@@ -10,7 +10,7 @@ export class LojasService {
     await this.checkCategory(createLojaDto.category_id);
 
     return this.prisma.store.create({
-      data: { ...createLojaDto, user_id: userId },
+      data: { ...createLojaDto, description: createLojaDto.description ?? '', user_id: userId },
     });
   }
 
