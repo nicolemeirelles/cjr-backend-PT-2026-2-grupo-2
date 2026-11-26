@@ -1,10 +1,14 @@
-import {ForbiddenException, Injectable, NotFoundException,} from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAvaliacaoProdutoDto } from './dto/create-avaliacao-produto.dto';
 import { UpdateAvaliacaoProdutoDto } from './dto/update-avaliacao-produto.dto';
 
 const INCLUDE_AUTOR = {
-  user: { select: { id: true, name: true } },
+  user: { select: { id: true, name: true, profile_picture_url: true } },
 } as const;
 
 const INCLUDE_DETALHES = {
@@ -20,7 +24,10 @@ const INCLUDE_DETALHES = {
 export class AvaliacaoProdutoService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto, userId: number) {
+  async create(
+    createAvaliacaoProdutoDto: CreateAvaliacaoProdutoDto,
+    userId: number,
+  ) {
     const { product_id, rating, comment } = createAvaliacaoProdutoDto;
 
     const produto = await this.prisma.product.findUnique({
@@ -58,8 +65,12 @@ export class AvaliacaoProdutoService {
     return avaliacao;
   }
 
-  async update(id: number, updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto, userId: number) {
-    const {rating, comment } = updateAvaliacaoProdutoDto;
+  async update(
+    id: number,
+    updateAvaliacaoProdutoDto: UpdateAvaliacaoProdutoDto,
+    userId: number,
+  ) {
+    const { rating, comment } = updateAvaliacaoProdutoDto;
 
     await this.verificarPropriedade(id, userId);
 
@@ -100,11 +111,3 @@ export class AvaliacaoProdutoService {
     }
   }
 }
-    
-
-    
-    
-  
-
-
-
